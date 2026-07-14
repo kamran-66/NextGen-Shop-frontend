@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import api from '../../../Api/api.jsx';
+import api from '@/Api/api.jsx';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../../../Features/Auth/context/AuthContext.jsx'
+import { AuthContext } from '@/Features/Auth/context/AuthContext.jsx'
 
 function Login() {
     const {login} = useContext(AuthContext);
