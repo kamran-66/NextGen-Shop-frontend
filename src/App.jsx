@@ -9,7 +9,7 @@ import GuestRoute from './Features/Auth/components/GuestRoute';
 import CartItem from './Features/Cart/pages/CartItem';
 import Checkout from './Features/Cart/pages/Checkout';
 import OrderSuccess from './Features/Orders/pages/OrderSuccess';
-import MyOrders from './Features/Orders/pages/MYOrders';
+import MyOrders from './Features/Orders/pages/MyOrders';
 import OrderManagement from './Features/Orders/pages/OrderManagment';
 
 function App() {
