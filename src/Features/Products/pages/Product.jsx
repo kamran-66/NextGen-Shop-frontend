@@ -22,7 +22,7 @@ function Home() {
       });
   }, []);
 
-  if (loading) return <div className="text-center p-10">Products Load Ho Rahe Hain...</div>;
+  if (loading) return <div className="text-center p-10">Loading for products...</div>;
 
   return (
     <div className="p-6 bg-zinc-900 min-h-screen text-white">
@@ -30,7 +30,7 @@ function Home() {
       <h1 className="text-3xl font-bold mb-6 text-center">Next-Gen-Shop Products</h1>
       
       {products.length === 0 ? (
-        <p className="text-center text-gray-400">Koi product nahi mila ya API backend check karein.</p>
+        <p className="text-center text-gray-400">No product found, check backend!</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {products.map(product => (
@@ -44,12 +44,16 @@ function Home() {
 
               }} />
 
-              <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
-              <p className="text-gray-400 text-sm mb-4">{product.description || 'No description'}</p>
-              <div className="flex justify-between items-center">
+                <h2 className="text-md  mb-2">Stock:{product.stock}</h2>
+                <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
+                <p className="text-gray-400 text-sm mb-4">{product.description || 'No description'}</p>
+                <div className="flex justify-between items-center">
                 <span className="text-green-400 font-bold">RS:{product.price}</span>
-                <button onClick={()=> addToCart(product)} className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">
-                  Add to Cart
+
+                <button onClick={()=> addToCart(product)} disabled={product.stock === 0} className={product.stock === 0 ? "bg-gray-400 cursor-not-allowed px-3 py-1 active:scale-95 rounded text-sm" : "bg-blue-600  hover:bg-blue-700 px-3 py-1 active:scale-95 rounded text-sm"}>  
+
+                      {product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+
                 </button>
               </div>
             </div>

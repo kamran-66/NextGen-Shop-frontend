@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../Features/Auth/context/AuthContext'; // Path check kar lijiyega
-import { CartContext } from '../Features/Cart/context/CartContext'; // Path check kar lijiyega
+import { AuthContext } from '../Features/Auth/context/AuthContext'; 
+import { CartContext } from '../Features/Cart/context/CartContext'; 
 
 function Navbar() {
   const { user, logout, token } = useContext(AuthContext);
@@ -46,7 +46,24 @@ function Navbar() {
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm text-white shadow-md uppercase">
               {user.name ? user.name.charAt(0) : 'U'}
             </div>
+
             
+        <Link 
+            to="/my-orders" 
+            className="text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-md text-sm font-medium transition"
+        >
+            My Orders
+        </Link>
+            
+             {(user.is_admin === 1 || user.is_admin === true || user.role === 'admin') && (
+            <Link 
+                to="/admin/orders" 
+                className="text-white bg-amber-600 hover:bg-amber-700 px-3 py-1.5 rounded-md text-xs md:text-sm font-medium transition shadow-sm border border-amber-500"
+            >
+                ⚙️ Admin Panel
+            </Link>
+        )}
+        
             {/* User Details */}
             <div className="flex flex-col text-left hidden sm:flex">
               <span className="text-sm font-semibold text-zinc-200">{user.name}</span>
