@@ -14,10 +14,10 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-zinc-800 border-b border-zinc-700 text-white px-6 py-4 flex justify-between items-center shadow-lg sticky top-0 z-50">
+    <nav className="bg-zinc-900 border-b border-zinc-800 text-white px-6 py-4 flex justify-between items-center shadow-xl sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
       {/* Left: Brand Logo / Name */}
-      <div className="flex items-center space-x-2">
-        <Link to="/" className="text-2xl font-black tracking-wider text-blue-500 hover:text-blue-400 transition">
+      <div className="flex items-center">
+        <Link to="/" className="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent hover:from-blue-300 hover:to-cyan-300 transition duration-300">
           Next-Gen Shop
         </Link>
       </div>
@@ -25,15 +25,15 @@ function Navbar() {
       {/* Right: Actions & User Profile */}
       <div className="flex items-center gap-6">
         {/* Navigation Links */}
-        <Link to="/" className="text-zinc-300 hover:text-white font-medium transition">
+        <Link to="/" className="text-zinc-400 hover:text-zinc-100 font-semibold text-sm tracking-wide transition duration-200">
           Products
         </Link>
 
         {/* 🛒 Cart Icon with Dynamic Count */}
-        <Link to="/cart" className="relative p-2 text-zinc-300 hover:text-white transition">
+        <Link to="/cart" className="relative p-2 text-zinc-400 hover:text-zinc-100 transition duration-200">
           <span className="text-xl">🛒</span>
           {cartCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full animate-pulse">
+            <span className="absolute -top-0.5 -right-0.5 bg-blue-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg shadow-blue-500/30 animate-pulse">
               {cartCount}
             </span>
           )}
@@ -41,49 +41,63 @@ function Navbar() {
 
         {/* 👤 Authentication / Profile Section */}
         {token && user ? (
-          <div className="flex items-center gap-4 bg-zinc-900/50 px-3 py-1.5 rounded-full border border-zinc-700">
+          <div className="flex items-center gap-4 bg-zinc-800/80 px-4 py-2 rounded-xl border border-zinc-700/50 shadow-inner">
             {/* User Profile Avatar (Initial Character) */}
-            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm text-white shadow-md uppercase">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-sm text-white shadow-md uppercase select-none">
               {user.name ? user.name.charAt(0) : 'U'}
             </div>
 
-            
-        <Link 
-            to="/my-orders" 
-            className="text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-md text-sm font-medium transition"
-        >
-            My Orders
-        </Link>
-            
-             {(user.is_admin === 1 || user.is_admin === true || user.role === 'admin') && (
-            <Link 
-                to="/admin/orders" 
-                className="text-white bg-amber-600 hover:bg-amber-700 px-3 py-1.5 rounded-md text-xs md:text-sm font-medium transition shadow-sm border border-amber-500"
-            >
-                ⚙️ Admin Panel
-            </Link>
-        )}
+            {/* Navigation Buttons inside profile container */}
+            <div className="flex items-center gap-2">
+              <Link 
+                to="/my-orders" 
+                className="text-zinc-200 bg-zinc-700 hover:bg-zinc-600 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium border border-zinc-600 transition duration-200"
+              >
+                My Orders
+              </Link>
+              
+              {/* Check if User is Admin (All safe fallback checks) */}
+              {(user?.is_admin === 1 || user?.is_admin === true || user?.role === 'admin') && (
+                <div className="flex items-center gap-2">
+                  {/* Admin Panel Button */}
+                  <Link 
+                    to="/admin/orders" 
+                    className="text-amber-100 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition duration-200 border border-amber-500/30 whitespace-nowrap"
+                  >
+                    ⚙️ Admin
+                  </Link>
+
+                  {/* Dashboard Button */}
+                  <Link 
+                    to="/admin/dashboard" 
+                    className="text-blue-100 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition duration-200 border border-blue-500/30 whitespace-nowrap"
+                  >
+                    📊 Dashboard
+                  </Link>
+                </div>
+              )}
+            </div>
         
-            {/* User Details */}
-            <div className="flex flex-col text-left hidden sm:flex">
-              <span className="text-sm font-semibold text-zinc-200">{user.name}</span>
-              <span className="text-xs text-zinc-400 truncate max-w-[120px]">{user.email}</span>
+            {/* User Details - (FIXED: Missing closing tag added below) */}
+            <div className="flex flex-col text-left hidden lg:flex border-l border-zinc-700/60 pl-3">
+              <span className="text-xs font-bold text-zinc-300 tracking-wide">{user.name}</span>
+              <span className="text-[11px] text-zinc-500 truncate max-w-[110px]">{user.email}</span>
             </div>
 
             {/* Logout Button */}
             <button
               onClick={handleLogoutClick}
-              className="ml-2 text-xs bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-full font-medium transition duration-200"
+              className="text-xs bg-red-500/10 text-red-400 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg font-semibold border border-red-500/20 transition duration-200"
             >
               Logout
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-3">
-            <Link to="/login" className="text-sm font-medium text-zinc-300 hover:text-white transition">
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-semibold text-zinc-400 hover:text-zinc-100 transition duration-200">
               Login
             </Link>
-            <Link to="/register" className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition">
+            <Link to="/register" className="text-sm bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white px-4 py-2 rounded-xl font-bold shadow-lg shadow-blue-600/20 transition duration-200">
               Register
             </Link>
           </div>

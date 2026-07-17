@@ -13,6 +13,12 @@ const Checkout = () => {
 
     const navigate = useNavigate();
 
+    // Format string to remove underscores or hyphens for clean UI
+    const formatProductName = (name) => {
+        if (!name) return '';
+        return name.replace(/[_-]/g, ' ');
+    };
+
     const calculateTotal = () => {
         return cartItems ? cartItems.reduce((total, item) => {
             const price = item.product?.price || item.price || 0;
@@ -38,9 +44,6 @@ const Checkout = () => {
 
             if (response.data.status) {
                 alert('Congratulations! Your order has been placed successfully.');
-                
-                // if (setCartItems) setCartItems([]);
-                // localStorage.removeItem('cart');
                 clearCart();
 
                 navigate('/order-success', {
@@ -48,7 +51,6 @@ const Checkout = () => {
                         orderId: response.data.order?.id || response.data.order_id,
                         total: calculateTotal()
                     }
-                    
                 });
             }
         } catch (err) {
@@ -60,97 +62,129 @@ const Checkout = () => {
 
     if (!cartItems || cartItems.length === 0) {
         return (
-            <div className="text-center py-12 bg-white rounded-lg shadow max-w-md mx-auto mt-10">
-                <h2 className="text-2xl font-bold text-gray-700">Your cart is currently empty!</h2>
-                <p className="text-gray-500 mt-2">Please add some products to your cart before checking out.</p>
-                <button onClick={() => navigate('/')} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
-                    Continue Shopping
-                </button>
+            <div className="bg-zinc-950 min-h-screen flex items-center justify-center p-4">
+                <div className="text-center py-16 border border-dashed border-zinc-800 rounded-2xl max-w-md w-full bg-zinc-900/30 shadow-xl">
+                    <h2 className="text-2xl font-extrabold text-zinc-200 tracking-wide">Your cart is currently empty!</h2>
+                    <p className="text-zinc-500 text-sm mt-2 max-w-[280px] mx-auto leading-relaxed">Please add some products to your cart before checking out.</p>
+                    <button 
+                        onClick={() => navigate('/')} 
+                        className="mt-6 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-3 rounded-xl transition duration-200 shadow-lg shadow-blue-600/10 hover:shadow-blue-500/20 active:scale-95"
+                    >
+                        Continue Shopping
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto p-4 md:p-6 max-w-6xl mt-6">
-            <h1 className="text-2xl font-bold text-gray-800 mb-6 text-left">Checkout</h1>
+        <div className="bg-zinc-950 min-h-screen text-zinc-100 p-4 md:p-8">
+            <div className="max-w-6xl mx-auto mt-2 text-left">
+                {/* Heading */}
+                <h1 className="text-2xl font-extrabold mb-8 tracking-wide bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+                    Checkout
+                </h1>
 
-            {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-left">
-                    {error}
-                </div>
-            )}
+                {error && (
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm font-medium">
+                        ⚠️ {error}
+                    </div>
+                )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-                    <h2 className="text-xl font-semibold text-gray-700 mb-4 text-left">Shipping Information</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                     
-                    <form onSubmit={handlePlaceOrder} className="space-y-4">
-                        <div>
-                            <label className="block text-gray-600 mb-1 text-left">Phone Number</label>
-                            <input
-                                type="text"
-                                required
-                                placeholder="e.g., 03001234567"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-black"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-600 mb-1 text-left">Complete Shipping Address</label>
-                            <textarea
-                                rows="3"
-                                required
-                                placeholder="Enter your full street, house number, city, etc..."
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-left text-black"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-gray-600 mb-1 text-left">Payment Method</label>
-                            <select
-                                value={paymentMethod}
-                                onChange={(e) => setPaymentMethod(e.target.value)}
-                                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-left text-black"
-                            >
-                                <option value="COD">Cash on Delivery (COD)</option>
-                            </select>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`w-full py-3 rounded-lg text-white font-semibold text-lg transition ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
-                        >
-                            {loading ? 'Processing Order...' : 'Place Order'}
-                        </button>
-                    </form>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-lg shadow-md h-fit">
-                    <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b pb-2 text-left">Order Summary</h2>
-                    
-                    <div className="divide-y divide-gray-200 max-h-60 overflow-y-auto mb-4">
-                        {cartItems.map((item) => (
-                            <div key={item.id} className="py-3 flex justify-between items-center text-sm">
-                                <div className="text-left">
-                                    <p className="text-gray-800 font-medium">{item.product?.name || item.name}</p>
-                                    <p className="text-gray-500 text-xs">Quantity: {item.quantity}</p>
-                                </div>
-                                <span className="font-medium text-gray-800">
-                                    Rs. {(item.product?.price || item.price || 0) * item.quantity}
-                                </span>
+                    {/* Left Column: Shipping Form */}
+                    <div className="lg:col-span-2 bg-zinc-900 border border-zinc-800/80 p-6 md:p-8 rounded-2xl shadow-xl">
+                        <h2 className="text-lg font-bold text-zinc-200 mb-6 border-b border-zinc-800/60 pb-3 tracking-wide">
+                            Shipping Information
+                        </h2>
+                        
+                        <form onSubmit={handlePlaceOrder} className="space-y-5">
+                            <div>
+                                <label className="block text-xs uppercase font-extrabold tracking-wider text-zinc-400 mb-2">
+                                    Phone Number
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder="e.g., 03001234567"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="w-full p-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 transition duration-150 text-sm"
+                                />
                             </div>
-                        ))}
+
+                            <div>
+                                <label className="block text-xs uppercase font-extrabold tracking-wider text-zinc-400 mb-2">
+                                    Complete Shipping Address
+                                </label>
+                                <textarea
+                                    rows="3"
+                                    required
+                                    placeholder="Enter your full street, house number, city, etc..."
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    className="w-full p-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 transition duration-150 text-sm resize-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs uppercase font-extrabold tracking-wider text-zinc-400 mb-2">
+                                    Payment Method
+                                </label>
+                                <select
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className="w-full p-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-200 focus:outline-none focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 transition duration-150 text-sm cursor-pointer"
+                                >
+                                    <option value="COD" className="bg-zinc-900">Cash on Delivery (COD)</option>
+                                </select>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`w-full py-3.5 rounded-xl font-bold text-sm tracking-wide transition duration-200 shadow-lg active:scale-[0.99] mt-2 ${
+                                    loading 
+                                        ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50 shadow-none' 
+                                        : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/10 hover:shadow-emerald-500/20'
+                                }`}
+                            >
+                                {loading ? 'Processing Order...' : 'Place Order'}
+                            </button>
+                        </form>
                     </div>
 
-                    <div className="border-t pt-4 flex justify-between items-center font-bold text-lg text-gray-900">
-                        <span>Total Bill:</span>
-                        <span>Rs. {calculateTotal()}</span>
+                    {/* Right Column: Order Summary */}
+                    <div className="bg-zinc-900 border border-zinc-800/80 p-5 md:p-6 rounded-2xl shadow-xl h-fit sticky top-24">
+                        <h2 className="text-lg font-bold text-zinc-200 mb-4 border-b border-zinc-800/60 pb-3 tracking-wide">
+                            Order Summary
+                        </h2>
+                        
+                        <div className="divide-y divide-zinc-800/40 max-h-60 overflow-y-auto mb-5 pr-1 custom-scrollbar">
+                            {cartItems.map((item) => (
+                                <div key={item.id} className="py-3 flex justify-between items-center text-sm">
+                                    <div>
+                                        <p className="text-zinc-200 font-bold tracking-wide">
+                                            {formatProductName(item.product?.name || item.name)}
+                                        </p>
+                                        <p className="text-zinc-500 text-xs font-semibold mt-0.5">Quantity: {item.quantity}</p>
+                                    </div>
+                                    <span className="font-bold text-zinc-300 text-sm tracking-tight">
+                                        Rs {parseFloat((item.product?.price || item.price || 0) * item.quantity).toLocaleString()}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="border-t border-zinc-800/80 pt-4 flex justify-between items-center font-black text-base text-zinc-200 tracking-wide">
+                            <span className="text-xs uppercase tracking-wider font-extrabold text-zinc-400">Total Bill:</span>
+                            <span className="text-xl text-emerald-400 font-black tracking-tight">
+                                Rs {calculateTotal().toLocaleString()}
+                            </span>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

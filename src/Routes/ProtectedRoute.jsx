@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '../Features/Auth/context/AuthContext';
+import { AuthContext } from '@/Features/Auth/context/AuthContext.jsx'; 
 
-const ProtectedRoute = () => {
-    const { token } = useContext(AuthContext);
+const ProtectedRoute = ({ adminOnly = false }) => {
+    const { user, token } = useContext(AuthContext);
 
     
     if (!token) {
@@ -11,6 +11,10 @@ const ProtectedRoute = () => {
     }
 
     
+    if (adminOnly && user?.role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
+
     return <Outlet />;
 };
 

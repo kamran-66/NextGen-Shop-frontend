@@ -10,9 +10,11 @@ import CartItem from './Features/Cart/pages/CartItem';
 import Checkout from './Features/Cart/pages/Checkout';
 import OrderSuccess from './Features/Orders/pages/OrderSuccess';
 import MyOrders from './Features/Orders/pages/MyOrders';
-import OrderManagement from './Features/Orders/pages/OrderManagment';
+import OrderManagement from './Features/Admin/OrderManagment';
+import Dashboard from './Features/Admin/Dashboard';
 
 function App() {
+    
     return (
 
       <div>
@@ -36,7 +38,14 @@ function App() {
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/my-orders" element={<MyOrders />} />
+
+
+                 {/*Strictly Admin Only Routes (Industry Standard Wrapper) */}
+                <Route element={<ProtectedRoute adminOnly={true} />}>
                     <Route path="/admin/orders" element={<OrderManagement />} />
+                    <Route path="/admin/dashboard" element={<Dashboard />} />
+                </Route>
+                    
                       
                     </Route>
                 

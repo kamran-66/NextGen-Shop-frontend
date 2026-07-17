@@ -10,31 +10,37 @@ const OrderSuccess = () => {
     const totalAmount = location.state?.total || 0;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-            <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white p-4">
+            <div className="bg-zinc-900 border border-zinc-800/80 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center hover:border-zinc-700/40 transition duration-300">
                 
-                {/* Green Success Checkmark Icon */}
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
-                    <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Emerald Success Checkmark Icon with Glow */}
+                <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/5">
+                    <svg className="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
 
                 {/* Main Heading */}
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Thank You!</h1>
-                <p className="text-gray-600 mb-6">Your order has been placed successfully and is now being processed.</p>
+                <h1 className="text-3xl font-black mb-2 tracking-wide bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+                    Thank You!
+                </h1>
+                <p className="text-zinc-400 text-sm mb-6 leading-relaxed">
+                    Your order has been placed successfully and is now being processed.
+                </p>
 
                 {/* Order Details Card */}
-                <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100 text-left space-y-3">
+                <div className="bg-zinc-950/50 rounded-xl p-4 mb-6 border border-zinc-800/60 text-left space-y-3">
                     <div className="flex justify-between items-center">
-                        <span className="text-gray-500 text-sm">Order ID:</span>
-                        <span className="font-mono font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-md text-sm">
-                            #{orderId}
+                        <span className="text-zinc-500 text-xs uppercase font-extrabold tracking-wider">Order ID</span>
+                        <span className="font-mono font-bold text-blue-400 bg-blue-500/10 border border-blue-500/10 px-3 py-1 rounded-lg text-xs tracking-tight">
+                            #NGS-{orderId}
                         </span>
                     </div>
-                    <div className="flex justify-between items-center border-t pt-3">
-                        <span className="text-gray-500 text-sm">Total Amount paid:</span>
-                        <span className="font-bold text-gray-800">Rs. {totalAmount}</span>
+                    <div className="flex justify-between items-center border-t border-zinc-800/40 pt-3">
+                        <span className="text-zinc-500 text-xs uppercase font-extrabold tracking-wider">Total Bill</span>
+                        <span className="font-black text-emerald-400 text-sm tracking-tight">
+                            Rs {parseFloat(totalAmount).toLocaleString()}
+                        </span>
                     </div>
                 </div>
 
@@ -42,14 +48,14 @@ const OrderSuccess = () => {
                 <div className="space-y-3">
                     <button 
                         onClick={() => navigate('/')}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200"
+                        className="w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg shadow-blue-600/10 hover:shadow-blue-500/20 active:scale-[0.98]"
                     >
                         Continue Shopping
                     </button>
                     
                     <button 
                         onClick={() => navigate('/my-orders')}
-                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-xl transition duration-200"
+                        className="w-full bg-zinc-950 hover:bg-zinc-800/60 text-zinc-300 border border-zinc-800 hover:border-zinc-700 text-xs font-bold py-3.5 px-4 rounded-xl transition duration-200 active:scale-[0.98]"
                     >
                         View My Orders
                     </button>
